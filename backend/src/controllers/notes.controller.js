@@ -27,24 +27,6 @@ export const getAllNotesUnarchive = async (req, res, next) => {
   }
 };
 
-// export const getNote = async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-
-//     const result = await pool.query("SELECT * FROM note WHERE id = $1", [id]);
-
-//     if (result.rows.length === 0) {
-//       return res.status(404).json({
-//         message: "Note not found",
-//       });
-//     }
-
-//     res.json(result.rows[0]);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
 export const createNote = async (req, res, next) => {
   const { title, description, isArchived } = req.body;
 

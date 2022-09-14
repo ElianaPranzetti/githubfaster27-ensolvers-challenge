@@ -153,7 +153,7 @@ const NotesList = () => {
 
       <div className="flex gap-2 py-3 justify-center mt-20">
         <button
-          className="bg-sky-500 text-white py-1 px-3 rounded-full hover:bg-sky-700 transition"
+          className="bg-sky-500 text-white font-semibold py-1 px-3 rounded-full hover:bg-sky-700 transition mt-5"
           onClick={() =>
             listArchivedIsActive ? handleGoToNotes() : setShowModalWindow(true)
           }
@@ -162,7 +162,7 @@ const NotesList = () => {
         </button>
 
         <button
-          className="bg-sky-500 text-white py-1 px-3 rounded-full hover:bg-sky-700 transition"
+          className="bg-sky-500 text-white font-semibold py-1 px-3 rounded-full hover:bg-sky-700 transition mt-5"
           onClick={() => handleClickArchive()}
         >
           Archived Notes
@@ -171,12 +171,12 @@ const NotesList = () => {
 
       <div>
         {isCreateNoteActive && notes.length === 0 ? (
-          <p className="font font-semibold items-center">
+          <p className="font font-semibold items-center text-xl">
             There are no notes to show
           </p>
         ) : null}
         {listArchivedIsActive && archivedNotes.length === 0 ? (
-          <p className="font font-semibold">
+          <p className="font font-semibold text-xl">
             There are no notes in the archived list
           </p>
         ) : null}
@@ -185,7 +185,7 @@ const NotesList = () => {
           {(isCreateNoteActive ? notes : archivedNotes).map((note, index) => (
             <div
               key={index}
-              className="rounded-lg border border-sky-300 p-4 flex flex-col gap-2"
+              className="rounded-lg border border-sky-300 px-4 pb-4 pt-2 flex flex-col gap-2"
             >
               <Note
                 note={note}
