@@ -1,23 +1,14 @@
-const express = require('express');
-const morgan = require('morgan');
-const cors = require('cors');
+import app from "./app.js";
+import { sequelize } from "./database/database.js";
+import "./models/Notes.js";
 
-const notesRoutes = require('./routes/notes.routes');
+async function main() {
+  try {
+    await sequelize.sync({ force: false });
+    app.listen(4000);
+  } catch (error) {
+    console.log("unable to connect to db", error);
+  }
+}
 
-const app = express();
-
-app.use(cors());
-app.use(morgan('dev'));
-app.use(express.json());
-//app.use(express.urlencoded({ extended: true }));
-
-app.use(notesRoutes)
-
-app.use((err, req, res, next) => {
-    return res.json({
-        message: err.message
-    })
-})
-
-app.listen(4000)
-console.log("server on port 4000")
+main();

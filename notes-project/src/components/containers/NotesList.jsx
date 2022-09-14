@@ -89,12 +89,12 @@ const NotesList = () => {
   };
 
   const archiveNote = async (note) => {
-      await fetch(`http://localhost:4000/notes/switch/${note.id}`, {
+    await fetch(`http://localhost:4000/notes/switch/${note.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ isarchived: true }),
+      body: JSON.stringify({ isArchived: true }),
     });
 
     loadNotesUnarchived();
@@ -106,7 +106,7 @@ const NotesList = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ isarchived: false }),
+      body: JSON.stringify({ isArchived: false }),
     });
     loadNotesArchived();
   };

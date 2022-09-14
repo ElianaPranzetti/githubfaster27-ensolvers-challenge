@@ -1,28 +1,20 @@
-const { Router } = require("express");
-const {
+import { Router } from "express";
+import {
   getAllNotesArchived,
-  getNote,
+  getAllNotesUnarchive,
   createNote,
   deleteNote,
   updateNote,
-  getAllNotesUnarchive,
-  switchIsArchived
-} = require("../controllers/notes.controller");
+  switchIsArchived,
+} from "../controllers/notes.controller.js";
 
 const router = Router();
 
 router.get("/notes/archived", getAllNotesArchived);
-
 router.get("/notes/unarchive", getAllNotesUnarchive);
-
-router.get("/notes/:id", getNote);
-
 router.post("/notes", createNote);
-
 router.delete("/notes/:id", deleteNote);
-
 router.put("/notes/:id", updateNote);
-
 router.put("/notes/switch/:id", switchIsArchived);
 
-module.exports = router;
+export default router;

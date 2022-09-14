@@ -1,130 +1,111 @@
-const { restart } = require("nodemon");
-const pool = require("../db");
+//const pool = require("../db");
+import { Note } from "../models/Notes.js";
 
-const getAllNotesArchived = async (req, res, next) => {
+export const getAllNotesArchived = async (req, res, next) => {
   try {
-    const allNotes = await pool.query(
-      "SELECT * FROM note WHERE isarchived = $1",
-      [true]
-    );
-    res.json(allNotes.rows);
+    const notes = await Note.findAll({
+      where: {
+        isArchived: true,
+      },
+    });
+    res.json(notes);
   } catch (error) {
     next(error);
   }
 };
 
-const getAllNotesUnarchive = async (req, res, next) => {
+export const getAllNotesUnarchive = async (req, res, next) => {
   try {
-    const allNotes = await pool.query(
-      "SELECT * FROM note WHERE isarchived = $1",
-      [false]
-    );
-    res.json(allNotes.rows);
+    const notes = await Note.findAll({
+      where: {
+        isArchived: false,
+      },
+    });
+    res.json(notes);
   } catch (error) {
     next(error);
   }
 };
 
-const getNote = async (req, res, next) => {
+// export const getNote = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+
+//     const result = await pool.query("SELECT * FROM note WHERE id = $1", [id]);
+
+//     if (result.rows.length === 0) {
+//       return res.status(404).json({
+//         message: "Note not found",
+//       });
+//     }
+
+//     res.json(result.rows[0]);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+export const createNote = async (req, res, next) => {
+  const { title, description, isArchived } = req.body;
+
   try {
-    const { id } = req.params;
+    const newNote = await Note.create({
+      title,
+      description,
+      isArchived,
+    });
 
-    const result = await pool.query("SELECT * FROM note WHERE id = $1", [id]);
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({
-        message: "Note not found",
-      });
-    }
-
-    res.json(result.rows[0]);
+    res.json(newNote);
   } catch (error) {
     next(error);
   }
 };
 
-const createNote = async (req, res, next) => {
-  const { title, description, isarchived = false } = req.body;
-  try {
-    const result = await pool.query(
-      "INSERT INTO note (title, description, isarchived) VALUES ($1,$2,$3) RETURNING *",
-      [title, description, isarchived]
-    );
-
-    res.json(result.rows[0]);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const deleteNote = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-
-    const result = await pool.query("DELETE FROM note WHERE id = $1", [id]);
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({
-        message: "Note not found",
-      });
-    }
-
-    return res.sendStatus(204);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const updateNote = async (req, res, next) => {
+export const deleteNote = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { title, description, isarchived } = req.body;
-
-    const result = await pool.query(
-      "UPDATE note SET title = $1, description=$2, isarchived=$3 WHERE id = $4 RETURNING *",
-      [title, description, isarchived, id]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({
-        message: "Note not found",
-      });
-    }
-
-    return res.json(result.rows[0]);
+    await Note.destroy({
+      where: {
+        id,
+      },
+    });
+    res.sendStatus(204);
   } catch (error) {
     next(error);
   }
 };
 
-const switchIsArchived = async (req, res, next) => {
+export const updateNote = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { isarchived } = req.body;
+    const { title, description } = req.body;
 
-    const result = await pool.query(
-      "UPDATE note SET isarchived=$1 WHERE id = $2 RETURNING *",
-      [isarchived, id]
-    );
+    const note = await Note.findByPk(id);
+    note.title = title;
+    note.description = description;
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({
-        message: "Note not found",
-      });
-    }
+    await note.save();
 
-    return res.json(result.rows[0]);
+    res.json(note);
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = {
-  getNote,
-  createNote,
-  deleteNote,
-  updateNote,
-  getAllNotesUnarchive,
-  getAllNotesArchived,
-  switchIsArchived,
+export const switchIsArchived = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { title, description, isArchived } = req.body;
+
+    const note = await Note.findByPk(id);
+    note.title = title;
+    note.description = description;
+    note.isArchived = isArchived;
+
+    await note.save();
+
+    res.json(note);
+  } catch (error) {
+    next(error);
+  }
 };
