@@ -15,3 +15,6 @@ pg 8.8.0
 pg-hstore 2.3.4
 sequelize 6.21.6
 nodemon 2.0.19
+
+bd user: postgres
+bd password: 123456789
